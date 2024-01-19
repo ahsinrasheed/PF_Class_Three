@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class Three</title>
+    <link rel="stylesheet" href="./style.css" />
+    <style>
+      form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        margin: auto;
+        padding: 0.4rem;
+        gap: 20px;
+      }
+      form input {
+        padding: 0.5rem;
+      }
+      .webcam {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        margin: auto;
+        width: 500px;
+        height: 400px;
+      }
+      .webcam button {
+        width: 200px;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <form>
+      <label for="name">First name:</label>
+      <input type="text" id="fname" name="fname" required /><br /><br />
+
+      <label for="password">Password:</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        required
+      /><br /><br />
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="number" name="number" value="name" /><br /><br />
+
+      <label for="vol">Volume (between 0 and 50):</label>
+      <input
+        type="range"
+        id="vol"
+        name="vol"
+        min="0"
+        max="50"
+        value="range"
+      /><br /><br />
+
+      <label for="vol">Select Image:</label>
+      <input
+        type="file"
+        accept="image/*"
+        capture="camera"
+        value="file"
+      /><br /><br />
+
+      <label for="vol">Select Image:</label>
+      <input type="file" accept="image/*" capture="user" /><br /><br />
+
+      <label for="vol">Select Video:</label>
+      <input type="file" accept="video/*" capture="camera" /><br /><br />
+
+      <input type="submit" name="submit" value="Submit" />
+    </form> -->
+
+    <div class="webcam">
+      <h1>Webcam Capture</h1>
+
+      <video id="videoElement" autoplay></video>
+      <button id="startButton">Start Webcam</button>
+      <button id="stopButton">Stop Webcam</button>
+      <button id="captureButton">Capture Photo</button>
+      <canvas id="canvasElement" style="display: none"></canvas>
+      <img id="photoElement" style="display: none" />
+    </div>
+
+    <script>
+      const videoElement = document.getElementById("videoElement");
+      const canvasElement = document.getElementById("canvasElement");
+      const photoElement = document.getElementById("photoElement");
+      const startButton = document.getElementById("startButton");
+      const stopButton = document.getElementById("stopButton");
+      const captureButton = document.getElementById("captureButton");
+
+      let stream;
+
+      async function startWebcam() {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          videoElement.srcObject = stream;
+          startButton.disabled = true;
+          captureButton.disabled = false;
+        } catch (error) {
+          console.error("Error accessing webcam:", error);
+        }
+      }
+      startButton.addEventListener("click", startWebcam);
+
+      function stopWebcam() {
+        // Stop all tracks in the stream
+        const tracks = stream.getTracks();
+        tracks.forEach((track) => track.stop());
+
+        // Reset video element and buttons
+        videoElement.srcObject = null;
+        startButton.disabled = false;
+        captureButton.disabled = true;
+        photoElement.style.display = "none";
+      }
+
+      stopButton.addEventListener("click", stopWebcam);
+
+      function capturePhoto() {
+        canvasElement.width = videoElement.videoWidth;
+        canvasElement.height = videoElement.videoHeight;
+        canvasElement.getContext("2d").drawImage(videoElement, 0, 0);
+        const photoDataUrl = canvasElement.toDataURL("image/jpeg");
+        photoElement.src = photoDataUrl;
+        photoElement.style.display = "block";
+      }
+      captureButton.addEventListener("click", capturePhoto);
+    </script>
+  </body>
+</html>
